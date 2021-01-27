@@ -1,0 +1,47 @@
+{
+  "name": "oiler",
+  "version": "0.1.0",
+  "description": "Helper to create basic SPA using React, Baobab and Fetchery",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "lint": "eslint src/** dev/** --ext ts,tsx",
+    "dev": "ts-node dev/server.ts",
+    "build": "rm -rf dist && tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "baobab": "^2.6.0",
+    "baobab-react": "^4.0.2",
+    "baobab-router": "^2.4.0",
+    "fetchery": "^0.1.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/parcel-bundler": "^1.12.3",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-html": "^6.1.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.22.0",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^1.0.6",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-asset-copier": "^1.1.0",
+    "prettier": "^2.1.2",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.2",
+    "uuid": "^8.3.2"
+  },
+  "browserslist": [
+    "last 3 Chrome versions"
+  ]
+}
