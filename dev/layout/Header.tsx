@@ -9,23 +9,20 @@ interface Props {
 export const Header: React.FunctionComponent<Props> = ({ oiler }) => (
   <div className="header bg-secondary container">
     <div className="row p-3">
-      <button
-        className="btn btn-primary mx-3"
-        onClick={() => oiler.open({ path: ['home'] })}
-      >
-        List TODOs
-      </button>
-      <button
-        className="btn btn-success mx-3"
-        onClick={() =>
-          oiler.open({
-            container: CONTAINERS.MODAL,
-            path: ['todo', 'create'],
-          })
-        }
-      >
-        Add new TODO
-      </button>
+      <div className="btn-group col-4">
+        <button
+          className="btn btn-light"
+          onClick={() => oiler.open({ path: ['home'] })}
+        >
+          List TODOs
+        </button>
+        <button
+          className="btn btn-light"
+          onClick={() => oiler.open({ path: ['about'] })}
+        >
+          About
+        </button>
+      </div>
     </div>
   </div>
 );
