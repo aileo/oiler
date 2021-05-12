@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Oiler, CONTAINERS } from '../../src';
+import { Oiler } from '../../src';
 
 interface Props {
   oiler: Oiler;
