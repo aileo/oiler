@@ -10,7 +10,7 @@
     "build": "rm -rf dist && tsc"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "baobab": "^2.6.0",
     "baobab-react": "^4.0.2",

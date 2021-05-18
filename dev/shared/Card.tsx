@@ -14,7 +14,7 @@ const Card: React.FunctionComponent<Props> = ({
   oiler,
   todo: { uuid, title, content },
 }) => (
-  <div className="card m-3" style={{ width: '20%' }}>
+  <div className="card m-3 w-25">
     <div className="card-header">
       <h5 className="card-title mb-0 text-center">{title}</h5>
     </div>
