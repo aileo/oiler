@@ -177,3 +177,17 @@ import oiler from 'oiler';
 // will render application in #container
 oiler.start('container');
 ```
+
+## Development
+
+Run `npm run dev` to start dev server in watch mode [on port `8080`](http://localhost:8080)
+
+### Contributions
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to run `npm run lint`.
+
+## License
+
+[MIT](./LICENSE)
