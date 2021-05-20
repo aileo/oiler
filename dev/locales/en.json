@@ -1,0 +1,11 @@
+{
+  "about": "About",
+  "what": {
+    "title": "What is Oiler",
+    "content": "Oiler is little helper written in typescript for Single Page Web App with integrated state (using Baobab), managed navigation and router (using Baobab-router)."
+  },
+  "why": {
+    "title": "Why this demo",
+    "content": "Oiler tends to remain simple and making an example is way faster than writing documentation."
+  }
+}

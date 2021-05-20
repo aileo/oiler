@@ -1,0 +1,11 @@
+{
+  "about": "A propos",
+  "what": {
+    "title": "Qu'est ce qu'Oiler",
+    "content": "Oiler est un petit module écrit en typescript pour simplifier la création d'application web avec un état (utilisant Baobab), une navigation gérée et un routeur (utilisant baobab-router)."
+  },
+  "why": {
+    "title": "Pourquoi cette démo",
+    "content": "Oiler tends à rester simple et écrire cet exemple était bien plus rapide que d'écrire une documentation complète."
+  }
+}

@@ -181,7 +181,7 @@ oiler.start('container', ['foo', 'bar']);
 
 ## Advanced
 
-### Methods
+### Authentication
 
 #### login
 
@@ -190,6 +190,39 @@ This method enable access to pages defined with `authenticated=true`.
 #### logout
 
 This method restrict access to pages defined with `authenticated=false`.
+
+### Locales
+
+Oiler uses [`node-polyglot`](https://github.com/airbnb/polyglot.js) to handle I18n.
+
+See [dev's "About" page](./dev/pages/About.tsx) and [dev's locales](./dev/locales) as a simple example.
+
+#### addLocale
+
+Used to register an available language in the application by providing a name and a URL to a JSON file containing texts.
+
+```js
+import oiler from 'oiler';
+
+oiler.addLocale('en', '/locales/en.json');
+oiler.addLocale('fr', 'https://foo.bar/locales/fr.json');
+```
+
+To load locale on start, locale name must be passed as the third parameter of `oiler.start`.
+
+#### setLocale
+
+Load locale file from URL and re-render.
+
+```js
+import oiler from 'oiler';
+
+await oiler.setLocale('fr');
+```
+
+#### text
+
+Returns text for the provided key, all parameters are passed to `polyglot.t` for interpolation (see [`node-polyglot`](https://github.com/airbnb/polyglot.js#interpolation) for more details).
 
 ### Events
 

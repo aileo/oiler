@@ -6,6 +6,8 @@ import { v4 } from 'uuid';
 const bundler = new Bundler(resolve(__dirname, './index.html'), {});
 const app = express();
 
+app.use('/locales', express.static(__dirname + '/locales'));
+
 const todos = {
   [v4()]: {
     title: 'Foo',

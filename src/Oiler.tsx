@@ -4,6 +4,8 @@ import * as ReactDOM from 'react-dom';
 import Baobab, { Cursor } from 'baobab';
 import { root, branch } from 'baobab-react/higher-order';
 import Router from 'baobab-router';
+import Polyglot from 'node-polyglot';
+
 import { get, set } from './helpers';
 
 import Fetchery, { IDefinition, IOptions, Services } from 'fetchery';
@@ -67,6 +69,7 @@ type Actions = IAction;
 
 export class Oiler extends EventEmitter {
   private _state: Baobab;
+  private _locales: Record<string, string> = {};
   private _actions: Record<string, Actions> = {};
   private _clients: Record<string, Fetchery> = {};
   private _routes: Route[] = [];
@@ -78,12 +81,16 @@ export class Oiler extends EventEmitter {
   private _PageWrapper: Component | false = false;
   private _ModalWrapper: Component | false = false;
 
+  private _polyglot: Polyglot;
+
   constructor() {
     super();
     const timestamp = new Date().valueOf();
+    this._polyglot = new Polyglot();
     this._state = new Baobab({
       navigation: {
         logged: false,
+        locale: '',
         loading: 0,
         page: { path: [], uuid: undefined, metadata: {}, timestamp },
         modal: { path: [], uuid: undefined, metadata: {}, timestamp },
@@ -156,6 +163,33 @@ export class Oiler extends EventEmitter {
   }
   set ModalWrapper(component: Component | false) {
     this._ModalWrapper = component;
+  }
+
+  /**
+   * Locale related methods
+   */
+  get locale(): string {
+    return this._state.get(['navigation', 'locale']);
+  }
+  public addLocale(name: string, url: string) {
+    this._locales[name] = url;
+  }
+  public async setLocale(locale: string) {
+    if (!(locale in this._locales)) {
+      throw new Error(`Locale ${locale} not found`);
+    }
+
+    const res = await fetch(this._locales[locale]);
+    const texts = await res.json();
+    this._polyglot.locale(locale);
+    this._polyglot.extend(texts);
+    this._state.set(['navigation', 'locale'], locale);
+  }
+  public text(path: string | string[], ...args: any[]): string {
+    return this._polyglot.t(
+      Array.isArray(path) ? path.join('.') : path,
+      ...args
+    );
   }
 
   public addClient(
@@ -264,7 +298,11 @@ export class Oiler extends EventEmitter {
     const Root = root(
       this._state,
       branch(
-        { page: ['navigation', 'page'], modal: ['navigation', 'modal'] },
+        {
+          locale: ['navigation', 'locale'],
+          page: ['navigation', 'page'],
+          modal: ['navigation', 'modal'],
+        },
         (({ oiler }) => (
           <div className="layout">
             {oiler.Header && <oiler.Header oiler={oiler} />}
@@ -281,7 +319,11 @@ export class Oiler extends EventEmitter {
       document.getElementById(containerId)
     );
   }
-  public start(containerId: string, defaultPage: string[]): void {
+  public async start(
+    containerId: string,
+    defaultPage: string[],
+    defaultLocale?: string
+  ): Promise<void> {
     logger.info('OILER[starting]');
     this._state.on('update', ({ data: { transaction } }) => {
       transaction.forEach(
@@ -293,6 +335,9 @@ export class Oiler extends EventEmitter {
     });
     this.binding();
     this.routing(defaultPage);
+    if (defaultLocale) {
+      await this.setLocale(defaultLocale);
+    }
     this.render(containerId);
     logger.notice('OILER[started]');
     this.emit('start');

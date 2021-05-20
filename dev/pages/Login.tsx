@@ -9,7 +9,7 @@ const Login: Page = function ({ oiler }) {
       </div>
       <div className="row">
         <div className="col-12">
-          <h2 className="mb-3">This page emulate some login page</h2>
+          <h2 className="mb-3">This page simulate some login page</h2>
           <button className="btn btn-primary" onClick={() => oiler.login()}>
             Enter
           </button>
