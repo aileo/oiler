@@ -44,7 +44,7 @@ List.state = {};
 List.dependencies = [{ action: ['todo', 'list'] }];
 
 // Does this page require authentication
-List.authenticated = false;
+List.authenticated = true;
 
 // Should app header and footer be displayed
 List.header = true;

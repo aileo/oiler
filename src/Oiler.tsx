@@ -198,7 +198,12 @@ export class Oiler extends EventEmitter {
     const _path = Array.isArray(path) ? path : path.split('.');
     this._routes.push({
       path: page.route,
-      state: { navigation: { page: { path: [..._path], ...page.state } } },
+      state: {
+        navigation: {
+          logged: page.authenticated,
+          page: { path: [..._path], ...page.state },
+        },
+      },
     });
 
     set(this._pages, path, page);
@@ -245,9 +250,11 @@ export class Oiler extends EventEmitter {
       });
     });
   }
-  private routing(): void {
+  private routing(defaultPage: string[]): void {
+    const defaultRoute = (get(this._pages, defaultPage) || { route: '/home' })
+      .route;
     const routing = {
-      defaultRoute: '/home',
+      defaultRoute,
       readOnly: [['navigation', 'logged']],
       routes: this._routes,
     };
@@ -274,7 +281,7 @@ export class Oiler extends EventEmitter {
       document.getElementById(containerId)
     );
   }
-  public start(containerId: string): void {
+  public start(containerId: string, defaultPage: string[]): void {
     logger.info('OILER[starting]');
     this._state.on('update', ({ data: { transaction } }) => {
       transaction.forEach(
@@ -285,20 +292,35 @@ export class Oiler extends EventEmitter {
       );
     });
     this.binding();
-    this.routing();
+    this.routing(defaultPage);
     this.render(containerId);
     logger.notice('OILER[started]');
+    this.emit('start');
   }
 
   public open({ container = CONTAINERS.PAGE, ...params }: Navigation): void {
     logger.info(`OPEN[${container}]`, params);
     this._state.set(['navigation', container], params);
+    this.emit('open', { container, ...params });
   }
 
   public refresh(container: CONTAINERS = CONTAINERS.PAGE): void {
     const timestamp = new Date().valueOf();
     logger.info(`REFRESH[${container}]`);
     this._state.set(['navigation', container, 'timestamp'], timestamp);
+    this.emit('refresh', {
+      container,
+      ...this._state.get(['navigation', container]),
+    });
+  }
+
+  public login(): void {
+    this._state.set(['navigation', 'logged'], true);
+    this.emit('login');
+  }
+  public logout(): void {
+    this._state.set(['navigation', 'logged'], false);
+    this.emit('logout');
   }
 }
 

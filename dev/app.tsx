@@ -15,4 +15,4 @@ app.Header = Layout.Header;
  */
 app.ModalWrapper = Layout.ModalWrapper;
 
-app.start('root');
+app.start('root', ['list']);

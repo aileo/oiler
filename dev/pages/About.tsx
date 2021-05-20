@@ -36,7 +36,7 @@ const About: Page = function () {
 About.route = '/about';
 About.state = {};
 About.dependencies = [];
-About.authenticated = false;
+About.authenticated = true;
 About.header = true;
 About.footer = false;
 

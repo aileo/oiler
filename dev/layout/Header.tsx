@@ -23,6 +23,12 @@ export const Header: React.FunctionComponent<Props> = ({ oiler }) => (
           About
         </button>
       </div>
+      <div className="col-6"></div>
+      <div className="btn-group col-2">
+        <button className="btn btn-light" onClick={() => oiler.logout()}>
+          Logout
+        </button>
+      </div>
     </div>
   </div>
 );

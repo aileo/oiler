@@ -85,10 +85,10 @@ const FooBar = function (props) {
   return <div>Foo bar</div>;
 };
 
-// Define route and state
+// Define route and state (pages only)
 FooBar.route = '/foo/bar/:id';
 FooBar.state = { id: ':id' };
-// Actions to execute on page display
+// Actions to execute on page/modal display
 FooBar.dependencies = [{ action: ['foo'] }, { action: ['bar'] }];
 // Set header/footer display (pages only)
 FooBar.header = true;
@@ -175,8 +175,43 @@ Once pages and modals are registered, application needs to be initialized to cre
 import oiler from 'oiler';
 
 // will render application in #container
-oiler.start('container');
+// and use page ['foo', 'bar'] as default page
+oiler.start('container', ['foo', 'bar']);
 ```
+
+## Advanced
+
+### Methods
+
+#### login
+
+This method enable access to pages defined with `authenticated=true`.
+
+#### logout
+
+This method restrict access to pages defined with `authenticated=false`.
+
+### Events
+
+#### start
+
+Emit when `oiler.start` is called.
+
+#### open
+
+Emit with page/modal parameters when `oiler.open` is called.
+
+#### refresh
+
+Emit with page/modal parameters when `oiler.refresh` is called.
+
+#### login
+
+Emit when `oiler.login` is called.
+
+#### logout
+
+Emit when `oiler.logout` is called.
 
 ## Development
 
