@@ -224,6 +224,16 @@ await oiler.setLocale('fr');
 
 Returns text for the provided key, all parameters are passed to `polyglot.t` for interpolation (see [`node-polyglot`](https://github.com/airbnb/polyglot.js#interpolation) for more details).
 
+```js
+import oiler from 'oiler';
+
+// In a page component
+const FooBar = function ({ oiler }) {
+  // use text from locale
+  return <div>{oiler.text('foo.bar')}</div>;
+};
+```
+
 ### Events
 
 #### start
