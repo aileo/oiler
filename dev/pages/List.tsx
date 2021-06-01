@@ -1,38 +1,36 @@
 import * as React from 'react';
-import { Page, stateWrapper, CONTAINERS } from '../../src';
+import { Page, useState, CONTAINERS } from '../../src';
 
 import Card from '../shared/Card';
 
 // Page component
-const List: Page = stateWrapper(
-  { todos: ['data', 'todos'] }, // use baobab-react to watch cursor
-  function ({ oiler, todos = [] }) {
-    return (
-      <div className="container">
-        <div className="row">
-          <div className="card m-3 w-25">
-            <div className="card-body d-flex align-items-center justify-content-center">
-              <button
-                className="btn btn-primary"
-                onClick={() =>
-                  oiler.open({
-                    container: CONTAINERS.MODAL,
-                    path: ['todo', 'create'],
-                  })
-                }
-              >
-                Add +
-              </button>
-            </div>
+const List: Page = ({ oiler }) => {
+  const todos = useState({ todos: ['data', 'todos'] }); // use oiler state
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="card m-3 w-25">
+          <div className="card-body d-flex align-items-center justify-content-center">
+            <button
+              className="btn btn-primary"
+              onClick={() =>
+                oiler.open({
+                  container: CONTAINERS.MODAL,
+                  path: ['todo', 'create'],
+                })
+              }
+            >
+              Add +
+            </button>
           </div>
-          {todos.map((todo) => (
-            <Card key={todo.uuid} oiler={oiler} todo={todo} />
-          ))}
         </div>
+        {todos.map((todo) => (
+          <Card key={todo.uuid} oiler={oiler} todo={todo} />
+        ))}
       </div>
-    );
-  }
-);
+    </div>
+  );
+};
 
 // Define page route
 List.route = '/home';

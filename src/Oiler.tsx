@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Baobab, { Cursor } from 'baobab';
-import { root, branch } from 'baobab-react/higher-order';
+import { useRoot, useBranch } from 'baobab-react/hooks';
 import Router from 'baobab-router';
 import Polyglot from 'node-polyglot';
 import * as Fetchery from 'fetchery';
@@ -170,10 +170,10 @@ export class Oiler extends EventEmitter {
   get locale(): string {
     return this._state.get(['navigation', 'locale']);
   }
-  public addLocale(name: string, url: string) {
+  public addLocale(name: string, url: string): void {
     this._locales[name] = url;
   }
-  public async setLocale(locale: string) {
+  public async setLocale(locale: string): Promise<void> {
     if (!(locale in this._locales)) {
       throw new Error(`Locale ${locale} not found`);
     }
@@ -294,29 +294,34 @@ export class Oiler extends EventEmitter {
     new Router(this._state, routing);
   }
   private render(containerId: string): void {
-    const Root = root(
-      this._state,
-      branch(
-        {
-          locale: ['navigation', 'locale'],
-          page: ['navigation', 'page'],
-          modal: ['navigation', 'modal'],
-        },
-        (({ oiler }) => (
-          <div className="layout">
-            {oiler.Header && <oiler.Header oiler={oiler} />}
-            {oiler.Page && <oiler.Page oiler={oiler} />}
-            {oiler.Footer && <oiler.Footer oiler={oiler} />}
-            {oiler.Modal && <oiler.Modal oiler={oiler} />}
-          </div>
-        )) as React.FunctionComponent<ComponentProps>
-      )
-    );
+    const state = this._state;
 
-    ReactDOM.render(
-      <Root oiler={this} />,
-      document.getElementById(containerId)
-    );
+    const Layout = () => {
+      useBranch({
+        locale: ['navigation', 'locale'],
+        page: ['navigation', 'page'],
+        modal: ['navigation', 'modal'],
+      });
+      return (
+        <div className="layout">
+          {this.Header && <this.Header oiler={this} />}
+          {this.Page && <this.Page oiler={this} />}
+          {this.Footer && <this.Footer oiler={this} />}
+          {this.Modal && <this.Modal oiler={this} />}
+        </div>
+      );
+    };
+
+    const Root = () => {
+      const StateRoot = useRoot(state);
+      return (
+        <StateRoot>
+          <Layout />
+        </StateRoot>
+      );
+    };
+
+    ReactDOM.render(<Root />, document.getElementById(containerId));
   }
   public async start(
     containerId: string,
@@ -368,4 +373,5 @@ export class Oiler extends EventEmitter {
   }
 }
 
-export default new Oiler();
+const oiler = new Oiler();
+export default oiler;

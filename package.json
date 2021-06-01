@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "eslint src/** dev/** --ext ts,tsx",
+    "lint": "eslint src/** dev/** --ext ts,tsx,json",
     "dev": "ts-node dev/server.ts",
     "build": "rm -rf dist && tsc"
   },
@@ -29,9 +29,10 @@
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
-    "eslint": "^7.18.0",
+    "eslint": "^7.27.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-html": "^6.1.1",
+    "eslint-plugin-json": "^3.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.22.0",
     "express": "^4.17.1",

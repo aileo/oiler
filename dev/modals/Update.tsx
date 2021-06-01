@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { CONTAINERS, Modal, stateWrapper } from '../../src';
+import { CONTAINERS, Modal, useState } from '../../src';
 
 import Form from '../shared/Form';
 
-const Update: Modal = stateWrapper(
-  { todo: ['data', 'todo'] },
-  ({ oiler, todo }) => (
+const Update: Modal = ({ oiler }) => {
+  const todo = useState({ todo: ['data', 'todo'] });
+  return (
     <div className="modal-content">
       <h2 className="modal-header">Update TODO</h2>
       <div className="modal-body">
@@ -27,8 +27,9 @@ const Update: Modal = stateWrapper(
         />
       </div>
     </div>
-  )
-);
+  );
+};
+
 Update.dependencies = [{ action: ['todo', 'get'], useUuid: true }];
 
 export default Update;
