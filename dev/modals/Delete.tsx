@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CONTAINERS, Modal, useState } from '../../src';
 
 const Delete: Modal = ({ oiler }) => {
-  const todo = useState({ todo: ['data', 'todo'] });
+  const { todo } = useState({ todo: ['data', 'todo'] });
   const closeAndRefresh = () => {
     oiler.open({ container: CONTAINERS.MODAL, path: [] });
     oiler.refresh();

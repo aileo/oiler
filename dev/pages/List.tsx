@@ -5,7 +5,7 @@ import Card from '../shared/Card';
 
 // Page component
 const List: Page = ({ oiler }) => {
-  const todos = useState({ todos: ['data', 'todos'] }); // use oiler state
+  const { todos } = useState({ todos: ['data', 'todos'] }); // use oiler state
   return (
     <div className="container">
       <div className="row">
@@ -24,7 +24,7 @@ const List: Page = ({ oiler }) => {
             </button>
           </div>
         </div>
-        {todos.map((todo) => (
+        {(todos || []).map((todo) => (
           <Card key={todo.uuid} oiler={oiler} todo={todo} />
         ))}
       </div>

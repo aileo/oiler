@@ -4,7 +4,7 @@ import { CONTAINERS, Modal, useState } from '../../src';
 import Form from '../shared/Form';
 
 const Update: Modal = ({ oiler }) => {
-  const todo = useState({ todo: ['data', 'todo'] });
+  const { todo } = useState({ todo: ['data', 'todo'] });
   return (
     <div className="modal-content">
       <h2 className="modal-header">Update TODO</h2>
@@ -23,7 +23,7 @@ const Update: Modal = ({ oiler }) => {
             oiler.open({ container: CONTAINERS.MODAL, path: [] });
             oiler.refresh();
           }}
-          todo={todo}
+          todo={todo || {}}
         />
       </div>
     </div>
