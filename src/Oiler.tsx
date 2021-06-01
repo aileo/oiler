@@ -5,10 +5,9 @@ import Baobab, { Cursor } from 'baobab';
 import { root, branch } from 'baobab-react/higher-order';
 import Router from 'baobab-router';
 import Polyglot from 'node-polyglot';
+import * as Fetchery from 'fetchery';
 
 import { get, set } from './helpers';
-
-import Fetchery, { IDefinition, IOptions, Services } from 'fetchery';
 
 import logger from './logger';
 
@@ -71,7 +70,7 @@ export class Oiler extends EventEmitter {
   private _state: Baobab;
   private _locales: Record<string, string> = {};
   private _actions: Record<string, Actions> = {};
-  private _clients: Record<string, Fetchery> = {};
+  private _clients: Record<string, Fetchery.Client> = {};
   private _routes: Route[] = [];
 
   private _pages: Collection<Page> = {};
@@ -103,11 +102,11 @@ export class Oiler extends EventEmitter {
     return this._state.select('data');
   }
 
-  get services(): Record<string, Services> {
+  get services(): Record<string, Fetchery.Services> {
     return Object.keys(this._clients).reduce((services, client) => {
       services[client] = this._clients[client].getServices();
       return services;
-    }, {} as Record<string, Services>);
+    }, {} as Record<string, Fetchery.Services>);
   }
 
   get actions(): Record<string, Actions> {
@@ -195,10 +194,10 @@ export class Oiler extends EventEmitter {
   public addClient(
     name: string,
     baseUrl: string,
-    defaults?: IOptions,
-    services?: Record<string, IDefinition>
+    defaults?: Fetchery.Options,
+    services?: Record<string, Fetchery.Definition>
   ): Oiler {
-    this._clients[name] = new Fetchery(baseUrl, defaults);
+    this._clients[name] = new Fetchery.Client(baseUrl, defaults);
 
     if (services) {
       Object.keys(services).forEach((path) =>
@@ -211,7 +210,7 @@ export class Oiler extends EventEmitter {
   public addService(
     client: string,
     path: string | string[],
-    definition: IDefinition
+    definition: Fetchery.Definition
   ): Oiler {
     if (!this._clients[client]) {
       throw new Error(`Unable to find client ${client}`);

@@ -1,5 +1,5 @@
 import app from '../../src';
-import { CAST, CONTENT_TYPE, METHOD } from 'fetchery';
+import { CONTENT_TYPE, METHOD } from 'fetchery';
 
 // Add API client to application
 app.addClient(
@@ -12,7 +12,6 @@ app.addClient(
       Expires: '0',
     },
     contentType: CONTENT_TYPE.JSON,
-    cast: CAST.JSON,
   },
   {
     'todo.list': { route: '/api/todo' },

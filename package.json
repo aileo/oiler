@@ -15,7 +15,7 @@
     "baobab": "^2.6.0",
     "baobab-react": "^4.0.2",
     "baobab-router": "^2.4.0",
-    "fetchery": "^0.1.1",
+    "fetchery": "^0.2.0",
     "node-polyglot": "^2.4.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
