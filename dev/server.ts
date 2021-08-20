@@ -1,6 +1,6 @@
 import { resolve } from 'path';
-import * as express from 'express';
-import * as Bundler from 'parcel-bundler';
+import express from 'express';
+import Bundler from 'parcel-bundler';
 import { v4 } from 'uuid';
 
 const bundler = new Bundler(resolve(__dirname, './index.html'), {});
