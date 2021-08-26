@@ -77,6 +77,7 @@ export class Oiler extends EventEmitter {
   private _modals: Collection<Modal> = {};
   private _Header: Component | false = false;
   private _Footer: Component | false = false;
+  private _Layout: Component | false = false;
   private _PageWrapper: Component | false = false;
   private _ModalWrapper: Component | false = false;
 
@@ -156,6 +157,9 @@ export class Oiler extends EventEmitter {
   }
   set Footer(component: Component | false) {
     this._Footer = component;
+  }
+  set Layout(component: Component | false) {
+    this._Layout = component;
   }
   set PageWrapper(component: Component | false) {
     this._PageWrapper = component;
@@ -302,13 +306,18 @@ export class Oiler extends EventEmitter {
         page: ['navigation', 'page'],
         modal: ['navigation', 'modal'],
       });
-      return (
-        <div className="layout">
-          {this.Header && <this.Header oiler={this} />}
-          {this.Page && <this.Page oiler={this} />}
-          {this.Footer && <this.Footer oiler={this} />}
-          {this.Modal && <this.Modal oiler={this} />}
-        </div>
+
+      const parts = [
+        this.Header && <this.Header key="header" oiler={this} />,
+        this.Page && <this.Page key="page" oiler={this} />,
+        this.Footer && <this.Footer key="footer" oiler={this} />,
+        this.Modal && <this.Modal key="modal" oiler={this} />,
+      ];
+
+      return this._Layout ? (
+        <this._Layout oiler={this}>{parts}</this._Layout>
+      ) : (
+        <div className="layout">{parts}</div>
       );
     };
 
