@@ -41,8 +41,21 @@ interface Dependency {
   allowFaillure?: boolean;
 }
 
+export enum QUERY_PARAMETER_CAST {
+  NUMBER = 'number',
+  BOOLEAN = 'boolean',
+  BASE64 = 'base64',
+  JSON = 'json',
+}
+
+interface RouterQueryParameter {
+  match: string;
+  cast?: QUERY_PARAMETER_CAST;
+}
+
 export interface Page extends React.FunctionComponent<ComponentProps> {
   route: string;
+  query?: Record<string, RouterQueryParameter>;
   state: Record<string, unknown>;
   header: boolean;
   footer: boolean;
@@ -56,6 +69,7 @@ export interface Modal extends React.FunctionComponent<ComponentProps> {
 
 interface Route {
   path: string;
+  query?: Record<string, RouterQueryParameter>;
   state: Record<string, unknown>;
   routes?: Route[];
 }
@@ -235,6 +249,7 @@ export class Oiler extends EventEmitter {
     const _path = Array.isArray(path) ? path : path.split('.');
     this._routes.push({
       path: page.route,
+      query: page.query,
       state: {
         navigation: {
           logged: page.authenticated,
