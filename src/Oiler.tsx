@@ -268,38 +268,35 @@ export class Oiler extends EventEmitter {
   }
 
   private binding(): void {
-    ['logged', CONTAINERS.PAGE, CONTAINERS.MODAL].forEach((trigger) => {
-      this._state.select(['navigation', trigger]).on('update', async () => {
-        if (['logged', CONTAINERS.PAGE].includes(trigger)) {
-          const page = this.Page;
-          const uuid = this._state.get('navigation', CONTAINERS.PAGE, 'uuid');
+    const runDependencies = async (container: CONTAINERS) => {
+      const display = container === CONTAINERS.PAGE ? this.Page : this.Modal;
+      const uuid = this._state.get(['navigation', container, 'uuid']);
+      const logged = this._state.get(['navigation', 'logged']);
 
-          if (page) {
-            await Promise.all(
-              page.dependencies.map(async (dependency) => {
-                const action = get(this._actions, dependency.action) as Action;
-                if (!action) return undefined;
-                return action({ uuid: dependency.useUuid ? uuid : undefined });
-              })
-            );
-          }
-        }
+      if (!display) return undefined;
+      if ((display as Page).authenticated && !logged) return undefined;
 
-        if (['logged', CONTAINERS.MODAL].includes(trigger)) {
-          const modal = this.Modal;
-          const uuid = this._state.get('navigation', CONTAINERS.MODAL, 'uuid');
+      logger.debug(`BINDINGS[${container}]`, display.dependencies);
 
-          if (modal) {
-            await Promise.all(
-              modal.dependencies.map(async (dependency) => {
-                const action = get(this._actions, dependency.action) as Action;
-                if (!action) return undefined;
-                return action({ uuid: dependency.useUuid ? uuid : undefined });
-              })
-            );
-          }
-        }
-      });
+      await Promise.all(
+        display.dependencies.map(async (dependency) => {
+          const action = get(this._actions, dependency.action) as Action;
+          if (!action) return undefined;
+          await action({ uuid: dependency.useUuid ? uuid : undefined });
+          return undefined;
+        })
+      );
+    };
+
+    this._state
+      .select(['navigation', CONTAINERS.PAGE])
+      .on('update', async () => await runDependencies(CONTAINERS.PAGE));
+    this._state
+      .select(['navigation', CONTAINERS.MODAL])
+      .on('update', async () => await runDependencies(CONTAINERS.MODAL));
+    this._state.select(['navigation', 'logged']).on('update', async () => {
+      await runDependencies(CONTAINERS.PAGE);
+      await runDependencies(CONTAINERS.MODAL);
     });
   }
   private routing(defaultPage: string[]): void {
