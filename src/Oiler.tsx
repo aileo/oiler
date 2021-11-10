@@ -11,17 +11,13 @@ import { get, set } from './helpers';
 
 import logger from './logger';
 
-interface Collection<T> {
-  [key: string]: T | Collection<T>;
-}
-
 export enum CONTAINERS {
   PAGE = 'page',
   MODAL = 'modal',
 }
 
 interface Navigation {
-  path: string[];
+  id: string;
   container?: CONTAINERS;
   uuid?: string;
   metadata?: Record<string, unknown>;
@@ -87,8 +83,8 @@ export class Oiler extends EventEmitter {
   private _clients: Record<string, Fetchery.Client> = {};
   private _routes: Route[] = [];
 
-  private _pages: Collection<Page> = {};
-  private _modals: Collection<Modal> = {};
+  private _pages: Record<string, Page> = {};
+  private _modals: Record<string, Modal> = {};
   private _Header: Component | false = false;
   private _Footer: Component | false = false;
   private _Layout: Component | false = false;
@@ -106,8 +102,8 @@ export class Oiler extends EventEmitter {
         logged: false,
         locale: '',
         loading: 0,
-        page: { path: [], uuid: undefined, metadata: {}, timestamp },
-        modal: { path: [], uuid: undefined, metadata: {}, timestamp },
+        page: { id: undefined, uuid: undefined, metadata: {}, timestamp },
+        modal: { id: undefined, uuid: undefined, metadata: {}, timestamp },
       },
       data: {},
     });
@@ -129,8 +125,8 @@ export class Oiler extends EventEmitter {
   }
 
   get Page(): Page | undefined {
-    const path = this._state.get('navigation', 'page', 'path');
-    const Page = get(this._pages, path) as Page;
+    const id = this._state.get('navigation', 'page', 'id');
+    const Page = this._pages[id] as Page;
     if (!Page) return undefined;
 
     const Wrapper = this._PageWrapper;
@@ -145,8 +141,8 @@ export class Oiler extends EventEmitter {
     return Object.assign(Component, Page);
   }
   get Modal(): Modal | undefined {
-    const path = this._state.get('navigation', 'modal', 'path');
-    const Modal = get(this._modals, path) as Modal;
+    const id = this._state.get('navigation', 'modal', 'id');
+    const Modal = this._modals[id] as Modal;
     if (!Modal) return undefined;
 
     const Wrapper = this._ModalWrapper;
@@ -245,25 +241,23 @@ export class Oiler extends EventEmitter {
     });
     return this;
   }
-  public addPage(path: string | string[], page: Page): Oiler {
-    const _path = Array.isArray(path) ? path : path.split('.');
+  public addPage(id: string, page: Page): Oiler {
     this._routes.push({
       path: page.route,
       query: page.query,
       state: {
         navigation: {
           logged: page.authenticated,
-          page: { path: [..._path], ...page.state },
+          page: { id, ...page.state },
         },
       },
     });
 
-    set(this._pages, path, page);
+    this._pages[id] = page;
     return this;
   }
-  public addModal(path: string | string[], modal: Modal): Oiler {
-    const _path = Array.isArray(path) ? path : path.split('.');
-    set(this._modals, _path, modal);
+  public addModal(id: string, modal: Modal): Oiler {
+    this._modals[id] = modal;
     return this;
   }
 
@@ -278,7 +272,7 @@ export class Oiler extends EventEmitter {
 
       logger.debug(`BINDINGS[${container}]`, display.dependencies);
 
-      await Promise.all(
+      return await Promise.all(
         display.dependencies.map(async (dependency) => {
           const action = get(this._actions, dependency.action) as Action;
           if (!action) return undefined;
@@ -299,9 +293,8 @@ export class Oiler extends EventEmitter {
       await runDependencies(CONTAINERS.MODAL);
     });
   }
-  private routing(defaultPage: string[]): void {
-    const defaultRoute = (get(this._pages, defaultPage) || { route: '/home' })
-      .route;
+  private routing(defaultPage: string): void {
+    const defaultRoute = (this._pages[defaultPage] || { route: '/home' }).route;
     const routing = {
       defaultRoute,
       readOnly: [['navigation', 'logged']],
@@ -346,7 +339,7 @@ export class Oiler extends EventEmitter {
   }
   public async start(
     containerId: string,
-    defaultPage: string[],
+    defaultPage: string,
     defaultLocale?: string
   ): Promise<void> {
     logger.info('OILER[starting]');

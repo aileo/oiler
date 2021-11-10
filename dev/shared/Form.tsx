@@ -18,7 +18,7 @@ const Form: React.FunctionComponent<Props> = ({
   <form
     onSubmit={onSubmit}
     onReset={() => {
-      oiler.open({ container: CONTAINERS.MODAL, path: [] });
+      oiler.open({ container: CONTAINERS.MODAL, id: undefined });
       oiler.refresh();
     }}
   >

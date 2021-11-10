@@ -7,6 +7,6 @@ import Login from './Login';
 /**
  * Add pages to application
  */
-app.addPage(['login'], Login);
-app.addPage(['list'], List);
-app.addPage(['about'], About);
+app.addPage('login', Login);
+app.addPage('list', List);
+app.addPage('about', About);

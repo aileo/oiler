@@ -4,7 +4,7 @@ import { CONTAINERS, Modal, useState } from '../../src';
 const Delete: Modal = ({ oiler }) => {
   const { todo } = useState({ todo: ['data', 'todo'] });
   const closeAndRefresh = () => {
-    oiler.open({ container: CONTAINERS.MODAL, path: [] });
+    oiler.open({ container: CONTAINERS.MODAL, id: undefined });
     oiler.refresh();
   };
   return (

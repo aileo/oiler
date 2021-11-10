@@ -14,10 +14,7 @@ const List: Page = ({ oiler }) => {
             <button
               className="btn btn-primary"
               onClick={() =>
-                oiler.open({
-                  container: CONTAINERS.MODAL,
-                  path: ['todo', 'create'],
-                })
+                oiler.open({ container: CONTAINERS.MODAL, id: 'todo.create' })
               }
             >
               Add +

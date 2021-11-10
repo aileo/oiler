@@ -20,7 +20,7 @@ const Update: Modal = ({ oiler }) => {
               title: data.get('title'),
               content: data.get('content'),
             });
-            oiler.open({ container: CONTAINERS.MODAL, path: [] });
+            oiler.open({ container: CONTAINERS.MODAL, id: undefined });
             oiler.refresh();
           }}
           todo={todo || {}}

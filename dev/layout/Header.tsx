@@ -12,13 +12,13 @@ export const Header: React.FunctionComponent<Props> = ({ oiler }) => (
       <div className="btn-group col-4">
         <button
           className="btn btn-light"
-          onClick={() => oiler.open({ path: ['home'] })}
+          onClick={() => oiler.open({ id: 'home' })}
         >
           List TODOs
         </button>
         <button
           className="btn btn-light"
-          onClick={() => oiler.open({ path: ['about'] })}
+          onClick={() => oiler.open({ id: 'about' })}
         >
           About
         </button>

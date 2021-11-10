@@ -95,7 +95,7 @@ FooBar.header = true;
 FooBar.footer = false;
 
 // Register page to app
-oiler.addPage(['foo', 'bar'], FooBar);
+oiler.addPage('foo.bar', FooBar);
 ```
 
 A simple example can be found in [./dev/pages](./dev/pages) and [./dev/modals](./dev/modals).
@@ -140,14 +140,14 @@ import oiler, { CONTAINERS } from 'oiler';
 
 // open a page with uuid
 oiler.open({
-  path: ['foo', 'bar'],
+  id: 'foo.bar',
   container: CONTAINERS.PAGE,
   uuid: 'some-id',
 });
 
 // open modal with metadata
 oiler.open({
-  path: ['foo', 'bar'],
+  id: 'foo.bar',
   container: CONTAINERS.MODAL,
   metadata: { foo: 'bar' },
 });

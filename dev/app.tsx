@@ -18,4 +18,4 @@ app.ModalWrapper = Layout.ModalWrapper;
 app.addLocale('en', '/locales/en.json');
 app.addLocale('fr', '/locales/fr.json');
 
-app.start('root', ['list'], 'en');
+app.start('root', 'list', 'en');

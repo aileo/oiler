@@ -34,7 +34,7 @@ const Card: React.FunctionComponent<Props> = ({
           onClick={() =>
             oiler.open({
               container: CONTAINERS.MODAL,
-              path: ['todo', 'update'],
+              id: 'todo.update',
               uuid,
             })
           }
@@ -46,7 +46,7 @@ const Card: React.FunctionComponent<Props> = ({
           onClick={() =>
             oiler.open({
               container: CONTAINERS.MODAL,
-              path: ['todo', 'delete'],
+              id: 'todo.delete',
               uuid,
             })
           }
