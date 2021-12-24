@@ -113,6 +113,10 @@ export class Oiler extends EventEmitter {
     return this._state.select('data');
   }
 
+  get navigation(): Cursor {
+    return this._state.get('navigation');
+  }
+
   get services(): Record<string, Fetchery.Services> {
     return Object.keys(this._clients).reduce((services, client) => {
       services[client] = this._clients[client].getServices();
