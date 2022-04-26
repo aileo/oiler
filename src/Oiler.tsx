@@ -101,7 +101,7 @@ export class Oiler extends EventEmitter {
       navigation: {
         logged: false,
         locale: '',
-        loading: 0,
+        loading: { page: false, modal: false },
         page: { id: undefined, uuid: undefined, metadata: {}, timestamp },
         modal: { id: undefined, uuid: undefined, metadata: {}, timestamp },
       },
@@ -276,7 +276,8 @@ export class Oiler extends EventEmitter {
 
       logger.debug(`BINDINGS[${container}]`, display.dependencies);
 
-      return await Promise.all(
+      this._state.set(['navigation', 'loading', container], true);
+      await Promise.all(
         display.dependencies.map(async (dependency) => {
           const action = get(this._actions, dependency.action) as Action;
           if (!action) return undefined;
@@ -284,6 +285,8 @@ export class Oiler extends EventEmitter {
           return undefined;
         })
       );
+      this._state.set(['navigation', 'loading', container], false);
+      return undefined;
     };
 
     this._state
