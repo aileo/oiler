@@ -19,12 +19,10 @@ export enum CONTAINERS {
 interface Navigation {
   id: string;
   container?: CONTAINERS;
-  uuid?: string;
   metadata?: Record<string, unknown>;
 }
 
 interface ComponentProps {
-  oiler: Oiler;
   [prop: string]: unknown;
 }
 type Component =
@@ -33,7 +31,6 @@ type Component =
 
 interface Dependency {
   action: string[];
-  useUuid?: boolean;
   allowFaillure?: boolean;
 }
 
@@ -136,9 +133,9 @@ export class Oiler extends EventEmitter {
     const Wrapper = this._PageWrapper;
     if (!Wrapper) return Page;
 
-    const Component: Component = ({ oiler }) => (
-      <Wrapper oiler={oiler}>
-        <Page oiler={oiler} />
+    const Component: Component = () => (
+      <Wrapper>
+        <Page />
       </Wrapper>
     );
 
@@ -152,9 +149,9 @@ export class Oiler extends EventEmitter {
     const Wrapper = this._ModalWrapper;
     if (!Wrapper) return Modal;
 
-    const Component: Component = ({ oiler }) => (
-      <Wrapper oiler={oiler}>
-        <Modal oiler={oiler} />
+    const Component: Component = () => (
+      <Wrapper>
+        <Modal />
       </Wrapper>
     );
 
@@ -268,7 +265,7 @@ export class Oiler extends EventEmitter {
   private binding(): void {
     const runDependencies = async (container: CONTAINERS) => {
       const display = container === CONTAINERS.PAGE ? this.Page : this.Modal;
-      const uuid = this._state.get(['navigation', container, 'uuid']);
+      const metadata = this._state.get(['navigation', container, 'metadata']);
       const logged = this._state.get(['navigation', 'logged']);
 
       if (!display) return undefined;
@@ -281,7 +278,7 @@ export class Oiler extends EventEmitter {
         display.dependencies.map(async (dependency) => {
           const action = get(this._actions, dependency.action) as Action;
           if (!action) return undefined;
-          await action({ uuid: dependency.useUuid ? uuid : undefined });
+          await action(metadata);
           return undefined;
         })
       );
@@ -320,14 +317,14 @@ export class Oiler extends EventEmitter {
       });
 
       const parts = [
-        this.Header && <this.Header key="header" oiler={this} />,
-        this.Page && <this.Page key="page" oiler={this} />,
-        this.Footer && <this.Footer key="footer" oiler={this} />,
-        this.Modal && <this.Modal key="modal" oiler={this} />,
+        this.Header && <this.Header key="header" />,
+        this.Page && <this.Page key="page" />,
+        this.Footer && <this.Footer key="footer" />,
+        this.Modal && <this.Modal key="modal" />,
       ];
 
       return this._Layout ? (
-        <this._Layout oiler={this}>{parts}</this._Layout>
+        <this._Layout>{parts}</this._Layout>
       ) : (
         <div className="layout">{parts}</div>
       );
