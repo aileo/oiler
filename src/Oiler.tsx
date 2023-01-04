@@ -23,6 +23,7 @@ interface Navigation {
 }
 
 interface ComponentProps {
+  metadata: object;
   [prop: string]: unknown;
 }
 type Component =
@@ -133,9 +134,9 @@ export class Oiler extends EventEmitter {
     const Wrapper = this._PageWrapper;
     if (!Wrapper) return Page;
 
-    const Component: Component = () => (
-      <Wrapper>
-        <Page />
+    const Component: Component = ({ metadata }) => (
+      <Wrapper metadata={metadata}>
+        <Page metadata={metadata} />
       </Wrapper>
     );
 
@@ -149,9 +150,9 @@ export class Oiler extends EventEmitter {
     const Wrapper = this._ModalWrapper;
     if (!Wrapper) return Modal;
 
-    const Component: Component = () => (
-      <Wrapper>
-        <Modal />
+    const Component: Component = ({ metadata }) => (
+      <Wrapper metadata={metadata}>
+        <Modal metadata={metadata} />
       </Wrapper>
     );
 
@@ -286,15 +287,28 @@ export class Oiler extends EventEmitter {
       return undefined;
     };
 
-    this._state
-      .select(['navigation', CONTAINERS.PAGE])
-      .on('update', async () => await runDependencies(CONTAINERS.PAGE));
-    this._state
-      .select(['navigation', CONTAINERS.MODAL])
-      .on('update', async () => await runDependencies(CONTAINERS.MODAL));
-    this._state.select(['navigation', 'logged']).on('update', async () => {
-      await runDependencies(CONTAINERS.PAGE);
-      await runDependencies(CONTAINERS.MODAL);
+    this._state.select(['navigation']).on('update', ({ data }) => {
+      const logged = data.previousData.logged !== data.currentData.logged;
+      let page =
+        logged || data.previousData.page.id !== data.currentData.page.id;
+      let modal =
+        logged || data.previousData.modal.id !== data.currentData.modal.id;
+
+      //
+      if (!page) {
+        page =
+          JSON.stringify(data.previousData.page.metadata) !==
+          JSON.stringify(data.currentData.page.metadata);
+      }
+
+      if (!modal) {
+        modal =
+          JSON.stringify(data.previousData.modal.metadata) !==
+          JSON.stringify(data.currentData.modal.metadata);
+      }
+
+      if (page) runDependencies(CONTAINERS.PAGE);
+      if (modal) runDependencies(CONTAINERS.MODAL);
     });
   }
   private routing(defaultPage: string): void {
@@ -310,21 +324,21 @@ export class Oiler extends EventEmitter {
     const state = this._state;
 
     const Layout = () => {
-      useBranch({
-        locale: ['navigation', 'locale'],
+      const { page } = useBranch({
+        locale: ['locale'],
         page: ['navigation', 'page'],
         modal: ['navigation', 'modal'],
       });
 
       const parts = [
-        this.Header && <this.Header key="header" />,
-        this.Page && <this.Page key="page" />,
-        this.Footer && <this.Footer key="footer" />,
-        this.Modal && <this.Modal key="modal" />,
+        this.Header && <this.Header key="header" metadata={page?.metadata} />,
+        this.Page && <this.Page key="page" metadata={page?.metadata} />,
+        this.Footer && <this.Footer key="footer" metadata={page?.metadata} />,
+        this.Modal && <this.Modal key="modal" metadata={page?.metadata} />,
       ];
 
       return this._Layout ? (
-        <this._Layout>{parts}</this._Layout>
+        <this._Layout metadata={page?.metadata}>{parts}</this._Layout>
       ) : (
         <div className="layout">{parts}</div>
       );
