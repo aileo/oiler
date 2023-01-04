@@ -294,7 +294,7 @@ export class Oiler extends EventEmitter {
       let modal =
         logged || data.previousData.modal.id !== data.currentData.modal.id;
 
-      //
+      // need better comparison method
       if (!page) {
         page =
           JSON.stringify(data.previousData.page.metadata) !==
