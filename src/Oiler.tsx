@@ -98,11 +98,11 @@ export class Oiler extends EventEmitter {
     this._state = new Baobab({
       navigation: {
         logged: false,
-        locale: '',
-        loading: { page: false, modal: false },
-        page: { id: undefined, uuid: undefined, metadata: {}, timestamp },
-        modal: { id: undefined, uuid: undefined, metadata: {}, timestamp },
+        page: { id: undefined, metadata: {}, timestamp },
+        modal: { id: undefined, metadata: {}, timestamp },
       },
+      loaders: { page: false, modal: false },
+      locale: '',
       data: {},
     });
   }
@@ -184,7 +184,7 @@ export class Oiler extends EventEmitter {
    * Locale related methods
    */
   get locale(): string {
-    return this._state.get(['navigation', 'locale']);
+    return this._state.get(['locale']);
   }
   public addLocale(name: string, url: string): void {
     this._locales[name] = url;
@@ -198,7 +198,7 @@ export class Oiler extends EventEmitter {
     const texts = await res.json();
     this._polyglot.locale(locale);
     this._polyglot.extend(texts);
-    this._state.set(['navigation', 'locale'], locale);
+    this._state.set(['locale'], locale);
   }
   public text(path: string | string[], ...args: any[]): string {
     return this._polyglot.t(
@@ -274,7 +274,7 @@ export class Oiler extends EventEmitter {
 
       logger.debug(`BINDINGS[${container}]`, display.dependencies);
 
-      this._state.set(['navigation', 'loading', container], true);
+      this._state.set(['loaders', container], true);
       await Promise.all(
         display.dependencies.map(async (dependency) => {
           const action = get(this._actions, dependency.action) as Action;
@@ -283,7 +283,7 @@ export class Oiler extends EventEmitter {
           return undefined;
         })
       );
-      this._state.set(['navigation', 'loading', container], false);
+      this._state.set(['loaders', container], false);
       return undefined;
     };
 
