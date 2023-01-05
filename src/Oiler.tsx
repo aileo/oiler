@@ -290,9 +290,13 @@ export class Oiler extends EventEmitter {
     this._state.select(['navigation']).on('update', ({ data }) => {
       const logged = data.previousData.logged !== data.currentData.logged;
       let page =
-        logged || data.previousData.page.id !== data.currentData.page.id;
+        logged ||
+        data.previousData.page.id !== data.currentData.page.id ||
+        data.previousData.page.timestamp !== data.currentData.page.timestamp;
       let modal =
-        logged || data.previousData.modal.id !== data.currentData.modal.id;
+        logged ||
+        data.previousData.modal.id !== data.currentData.modal.id ||
+        data.previousData.modal.timestamp !== data.currentData.modal.timestamp;
 
       // need better comparison method
       if (!page) {
