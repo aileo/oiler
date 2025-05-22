@@ -62,9 +62,15 @@ export interface Modal extends React.FunctionComponent<ComponentProps> {
   dependencies: Dependency[];
 }
 
-export interface Wrapper extends React.FunctionComponent<ComponentProps> {
+interface WrapperProps {
+  page: Record<string, unknown>;
+  modal: Record<string, unknown>;
   children?: React.ReactNode;
+  [prop: string]: unknown;
 }
+export type Wrapper =
+  | React.ComponentClass<WrapperProps>
+  | React.FunctionComponent<WrapperProps>;
 
 export type Layout = Component;
 
