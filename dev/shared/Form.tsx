@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { CONTAINERS, Oiler } from '../../src';
+
+import app, { CONTAINERS } from '../../src';
 
 interface Props {
-  oiler: Oiler;
   todo?: {
     title?: string;
     content?: string;
@@ -11,15 +11,14 @@ interface Props {
 }
 
 const Form: React.FunctionComponent<Props> = ({
-  oiler,
   onSubmit,
   todo = {},
 }: Props) => (
   <form
     onSubmit={onSubmit}
     onReset={() => {
-      oiler.open({ container: CONTAINERS.MODAL, id: undefined });
-      oiler.refresh();
+      app.open({ container: CONTAINERS.MODAL, id: undefined });
+      app.refresh();
     }}
   >
     <div className="form-control-group">

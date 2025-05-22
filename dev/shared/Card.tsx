@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { CONTAINERS, Oiler } from '../../src';
+
+import app, { CONTAINERS } from '../../src';
 
 interface Props {
-  oiler: Oiler;
   todo: {
     uuid: string;
     title: string;
@@ -11,7 +11,6 @@ interface Props {
 }
 
 const Card: React.FunctionComponent<Props> = ({
-  oiler,
   todo: { uuid, title, content },
 }) => (
   <div className="card m-3 w-25">
@@ -32,10 +31,10 @@ const Card: React.FunctionComponent<Props> = ({
         <button
           className="btn btn-sm btn-secondary"
           onClick={() =>
-            oiler.open({
+            app.open({
               container: CONTAINERS.MODAL,
               id: 'todo.update',
-              uuid,
+              metadata: { uuid },
             })
           }
         >
@@ -44,10 +43,10 @@ const Card: React.FunctionComponent<Props> = ({
         <button
           className="btn btn-sm btn-danger"
           onClick={() =>
-            oiler.open({
+            app.open({
               container: CONTAINERS.MODAL,
               id: 'todo.delete',
-              uuid,
+              metadata: { uuid },
             })
           }
         >

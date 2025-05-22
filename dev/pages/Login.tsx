@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Page } from '../../src';
 
-const Login: Page = function ({ oiler }) {
+import app, { Page } from '../../src';
+
+const Login: Page = function () {
   return (
     <div className="container">
       <div className="row mt-3">
@@ -10,7 +11,7 @@ const Login: Page = function ({ oiler }) {
       <div className="row">
         <div className="col-12">
           <h2 className="mb-3">This page simulate some login page</h2>
-          <button className="btn btn-primary" onClick={() => oiler.login()}>
+          <button className="btn btn-primary" onClick={() => app.login()}>
             Enter
           </button>
         </div>

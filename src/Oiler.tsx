@@ -17,13 +17,14 @@ export enum CONTAINERS {
 }
 
 interface Navigation {
-  id: string;
+  id?: string;
   container?: CONTAINERS;
   metadata?: Record<string, unknown>;
 }
 
 interface ComponentProps {
-  metadata: object;
+  page: Record<string, unknown>;
+  modal: Record<string, unknown>;
   [prop: string]: unknown;
 }
 type Component =
@@ -60,6 +61,12 @@ export interface Page extends React.FunctionComponent<ComponentProps> {
 export interface Modal extends React.FunctionComponent<ComponentProps> {
   dependencies: Dependency[];
 }
+
+export interface Wrapper extends React.FunctionComponent<ComponentProps> {
+  children?: React.ReactNode;
+}
+
+export type Layout = Component;
 
 interface Route {
   path: string;
@@ -134,9 +141,9 @@ export class Oiler extends EventEmitter {
     const Wrapper = this._PageWrapper;
     if (!Wrapper) return Page;
 
-    const Component: Component = ({ metadata }) => (
-      <Wrapper metadata={metadata}>
-        <Page metadata={metadata} />
+    const Component: Component = ({ page, modal }) => (
+      <Wrapper {...{ page, modal }}>
+        <Page {...{ page, modal }} />
       </Wrapper>
     );
 
@@ -150,9 +157,9 @@ export class Oiler extends EventEmitter {
     const Wrapper = this._ModalWrapper;
     if (!Wrapper) return Modal;
 
-    const Component: Component = ({ metadata }) => (
-      <Wrapper metadata={metadata}>
-        <Modal metadata={metadata} />
+    const Component: Component = ({ page, modal }) => (
+      <Wrapper {...{ page, modal }}>
+        <Modal {...{ page, modal }} />
       </Wrapper>
     );
 
@@ -328,21 +335,21 @@ export class Oiler extends EventEmitter {
     const state = this._state;
 
     const Layout = () => {
-      const { page } = useBranch({
+      const { page, modal } = useBranch({
         locale: ['locale'],
         page: ['navigation', 'page'],
         modal: ['navigation', 'modal'],
       });
 
       const parts = [
-        this.Header && <this.Header key="header" metadata={page?.metadata} />,
-        this.Page && <this.Page key="page" metadata={page?.metadata} />,
-        this.Footer && <this.Footer key="footer" metadata={page?.metadata} />,
-        this.Modal && <this.Modal key="modal" metadata={page?.metadata} />,
+        this.Header && <this.Header key="header" {...{ page, modal }} />,
+        this.Page && <this.Page key="page" {...{ page, modal }} />,
+        this.Footer && <this.Footer key="footer" {...{ page, modal }} />,
+        this.Modal && <this.Modal key="modal" {...{ page, modal }} />,
       ];
 
       return this._Layout ? (
-        <this._Layout metadata={page?.metadata}>{parts}</this._Layout>
+        <this._Layout {...{ page, modal }}>{parts}</this._Layout>
       ) : (
         <div className="layout">{parts}</div>
       );

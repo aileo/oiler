@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { CONTAINERS, Modal, useState } from '../../src';
 
-const Delete: Modal = ({ oiler }) => {
+import app, { CONTAINERS, Modal, useState } from '../../src';
+
+const Delete: Modal = () => {
   const { todo } = useState({ todo: ['data', 'todo'] });
   const closeAndRefresh = () => {
-    oiler.open({ container: CONTAINERS.MODAL, id: undefined });
-    oiler.refresh();
+    app.open({ container: CONTAINERS.MODAL, id: undefined });
+    app.refresh();
   };
   return (
     <div className="modal-content">
@@ -19,7 +20,7 @@ const Delete: Modal = ({ oiler }) => {
         <button
           className="btn btn-danger"
           onClick={async () => {
-            await oiler.actions.todo.del({ uuid: todo.uuid });
+            await app.actions.todo.del({ uuid: todo.uuid });
             closeAndRefresh();
           }}
         >
@@ -35,6 +36,6 @@ const Delete: Modal = ({ oiler }) => {
     </div>
   );
 };
-Delete.dependencies = [{ action: ['todo', 'get'], useUuid: true }];
+Delete.dependencies = [{ action: ['todo', 'get'] }];
 
 export default Delete;

@@ -1,13 +1,7 @@
 import * as React from 'react';
+import { Wrapper } from '../../src';
 
-import { Oiler } from '../../src';
-
-interface Props {
-  oiler: Oiler;
-  children?: React.ReactNode;
-}
-
-export const ModalWrapper: React.FunctionComponent<Props> = ({ children }) => {
+export const ModalWrapper: Wrapper = ({ children }) => {
   return (
     <div
       className="modal fade in show bg-light"

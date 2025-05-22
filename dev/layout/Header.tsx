@@ -1,31 +1,27 @@
 import * as React from 'react';
 
-import { Oiler } from '../../src';
+import app, { Layout } from '../../src';
 
-interface Props {
-  oiler: Oiler;
-}
-
-export const Header: React.FunctionComponent<Props> = ({ oiler }) => (
+export const Header: Layout = () => (
   <div className="header bg-secondary container">
     <div className="row p-3">
       <div className="btn-group col-4">
         <button
           className="btn btn-light"
-          onClick={() => oiler.open({ id: 'home' })}
+          onClick={() => app.open({ id: 'home' })}
         >
           List TODOs
         </button>
         <button
           className="btn btn-light"
-          onClick={() => oiler.open({ id: 'about' })}
+          onClick={() => app.open({ id: 'about' })}
         >
           About
         </button>
       </div>
       <div className="col-6"></div>
       <div className="btn-group col-2">
-        <button className="btn btn-light" onClick={() => oiler.logout()}>
+        <button className="btn btn-light" onClick={() => app.logout()}>
           Logout
         </button>
       </div>

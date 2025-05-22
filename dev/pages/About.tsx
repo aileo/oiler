@@ -1,28 +1,29 @@
 import * as React from 'react';
-import { Page } from '../../src';
 
-const About: Page = function ({ oiler }) {
+import app, { Page } from '../../src';
+
+const About: Page = function () {
   return (
     <div className="container">
       <div className="row mt-3">
-        <h1 className="col-8">{oiler.text('about')}</h1>
+        <h1 className="col-8">{app.text('about')}</h1>
         <div className="col-4 btn-group">
-          <button className="btn" onClick={() => oiler.setLocale('en')}>
+          <button className="btn" onClick={() => app.setLocale('en')}>
             English
           </button>
-          <button className="btn" onClick={() => oiler.setLocale('fr')}>
+          <button className="btn" onClick={() => app.setLocale('fr')}>
             Français
           </button>
         </div>
       </div>
       <div className="row">
         <div className="col-6">
-          <h2 className="mb-3">{oiler.text('what.title')}</h2>
-          <p>{oiler.text(['what', 'content'])}</p>
+          <h2 className="mb-3">{app.text('what.title')}</h2>
+          <p>{app.text(['what', 'content'])}</p>
         </div>
         <div className="col-6">
-          <h2 className="mb-3">{oiler.text('why.title')}</h2>
-          <p>{oiler.text(['why', 'content'])}</p>
+          <h2 className="mb-3">{app.text('why.title')}</h2>
+          <p>{app.text(['why', 'content'])}</p>
         </div>
       </div>
     </div>

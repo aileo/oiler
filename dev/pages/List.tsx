@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Page, useState, CONTAINERS } from '../../src';
 
+import app, { Page, useState, CONTAINERS } from '../../src';
 import Card from '../shared/Card';
 
 // Page component
-const List: Page = ({ oiler }) => {
+const List: Page = () => {
   const { todos } = useState({ todos: ['data', 'todos'] }); // use oiler state
   return (
     <div className="container">
@@ -14,7 +14,7 @@ const List: Page = ({ oiler }) => {
             <button
               className="btn btn-primary"
               onClick={() =>
-                oiler.open({ container: CONTAINERS.MODAL, id: 'todo.create' })
+                app.open({ container: CONTAINERS.MODAL, id: 'todo.create' })
               }
             >
               Add +
@@ -22,7 +22,7 @@ const List: Page = ({ oiler }) => {
           </div>
         </div>
         {(todos || []).map((todo) => (
-          <Card key={todo.uuid} oiler={oiler} todo={todo} />
+          <Card key={todo.uuid} todo={todo} />
         ))}
       </div>
     </div>
