@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom/client';
 import Baobab, { Cursor } from 'baobab';
 import { useRoot, useBranch } from 'baobab-react/hooks';
 import Router from 'baobab-router';
@@ -364,7 +364,11 @@ export class Oiler extends EventEmitter {
       );
     };
 
-    ReactDOM.render(<Root />, document.getElementById(containerId));
+    const rootElement = document.getElementById(containerId);
+    if (rootElement !== null) {
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(<Root />);
+    }
   }
   public async start(
     containerId: string,
